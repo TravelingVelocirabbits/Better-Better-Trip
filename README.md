@@ -1,2 +1,2 @@
 # Better-Trip
-A better TripAdvisor
+A better TripAdvisor: Jimmy Phy, JD Armada, Chris Stamper, Brandon Do
