@@ -5,10 +5,10 @@ import './app.css'; //added line
 //rafc code to make fast components
 
 const App = () => {
-     
+     //This change worked pelase jesus
   return (    
       <div className="container">
-       <h1 className="text-primary text-4xl font-bold">Hello world! I am using React</h1>
+       <h1 className="text-primary text-7xl font-bold">Hello world! I am using React</h1>
         </div>
          )
 }
