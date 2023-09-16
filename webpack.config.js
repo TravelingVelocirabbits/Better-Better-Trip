@@ -49,8 +49,12 @@ module.exports = {
 
         // whatever route we want different pages to goto
         // backend
+
+        
         proxy: {
-            '/': 'http://localhost:3000', 
+            '/': 'http://localhost:3000',
+            '/signup': 'http://localhost:3000',  
+            '/mainpage': 'http://localhost:3000',  
         },
     }, 
     resolve: {
