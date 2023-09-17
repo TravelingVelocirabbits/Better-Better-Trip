@@ -2,11 +2,6 @@ import { useState, useEffect} from "react";
 import React from "react";
 
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext }from 'react'
-
-
-const Signup = () => {
-    const navigate = useNavigate();
 
 
 const Signup = () => {
