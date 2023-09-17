@@ -1,11 +1,11 @@
 const express = require('express');
-const apiController = require('../Controllers/APIController.js');
+const apiController = require('../Controllers/APIController')
 const router = express.Router();
 
-router.post('/', apiController.getLatLong, (req, res) => {
+router.post('/', apiController.getLatLong, apiController.getItinerary, (req, res) => {
 
   console.log('finished post request')
-  return res.status(201).json(res.locals.coords);
+  return res.status(201).json(res.locals.itinerary);
 })
 
 module.exports = router;
