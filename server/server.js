@@ -3,8 +3,9 @@ const path = require('path')
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://jdarmada:IDhZTT1neBqRK7Jj@cluster0.dogx99a.mongodb.net/?retryWrites=true&w=majority');
 
-const User = require('./Models/userModel')
+
 const userRouter = require('./routers/userRouter')
 
 const apiRouter = require('./routers/apiRouter')
@@ -17,7 +18,11 @@ app.use(cors());
 
 //router for user info requests
 app.use('/user', userRouter, (req, res) => {
+
+    console.log('hi')
+
     return res.sendStatus(200)
+
 
 })
 

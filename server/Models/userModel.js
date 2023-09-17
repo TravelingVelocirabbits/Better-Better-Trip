@@ -2,6 +2,18 @@ const mongoose = require('mongoose');
 const {Schema, model} = mongoose;
 const MONGO_URI = 'mongodb+srv://jdarmada:IDhZTT1neBqRK7Jj@cluster0.dogx99a.mongodb.net/?retryWrites=true&w=majority'
 
+
+const UserSchema = new Schema({
+    username: {type: String, required: true, unique: true},
+    password: {type: String, required: true}
+});
+
+
+const UserModel = model('User', UserSchema);
+
+
+module.exports = UserModel
+=======
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -65,4 +77,5 @@ const Location = mongoose.model('Location', LocationSchema)
     User,
     Location,
   }
+
   

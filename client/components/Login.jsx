@@ -9,7 +9,29 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    // ... rest of your code
+
+    //LOCALHOST3000/USERS/LOGIN
+    //POST REQUEST 
+
+
+    async function log(ev) {
+        ev.preventDefault();
+        const response = await fetch('http://localhost:3000/user/login', {
+            method: 'POST',
+            body: JSON.stringify({username, password}),
+            headers: {'Content-type':'application/json'},
+            credentials: 'include',
+        });
+        if(response.ok){ 
+            response.json().then(userInfo=>{
+                setUserInfo(userInfo);
+                return navigate('/mainpage')  
+            })
+        }else{
+            alert('wrong credentials')
+        }
+    }
+
 
     return (
         <div className="flex w-full h-full">
