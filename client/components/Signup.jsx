@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 import { useState, useContext }from 'react'
+
+
 const Signup = () => {
     const navigate = useNavigate();
 
@@ -35,10 +37,13 @@ const Signup = () => {
             }}/>
             <input type="password" placeholder="password" value ={password} onChange={event => setPassword(event.target.value)}/>
             <button className="logBtn">enter</button>
+            <p>test</p>
         </form>
     </div>
     )
 }
+
+
 
 
 

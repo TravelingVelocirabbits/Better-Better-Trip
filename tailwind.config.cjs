@@ -3,7 +3,9 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                primary: '#1B73E8',
+                olive: '#7d9183',
+                grayGreen: '#dadfdb',
+                darkGreen: '#58725f',
             },
         },
     },

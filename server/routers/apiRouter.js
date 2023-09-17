@@ -1,5 +1,5 @@
 const express = require('express');
-const apiController = require('../Controllers/APIController.js');
+const apiController = require('../Controllers/apiController.js');
 const router = express.Router();
 
 router.post('/', apiController.getLatLong, (req, res) => {
