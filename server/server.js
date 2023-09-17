@@ -17,7 +17,7 @@ app.use(cors());
 
 //router for user info requests
 app.use('/user', userRouter, (req, res) => {
-    return req.sendStatus(200)
+    return res.sendStatus(200)
 
 })
 

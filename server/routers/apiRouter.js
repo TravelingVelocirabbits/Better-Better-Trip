@@ -1,5 +1,7 @@
 const express = require('express');
+
 const apiController = require('../Controllers/APIController')
+
 const router = express.Router();
 
 router.post('/', apiController.getLatLong, apiController.getItinerary, (req, res) => {
