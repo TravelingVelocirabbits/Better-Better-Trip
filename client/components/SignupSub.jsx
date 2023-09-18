@@ -18,7 +18,7 @@ const SignupSub = () => {
                 <p className="text-xl text-white">Sign up and plan your next getaway</p>
                     <Link to='/Signup'>
 
-                <button className="text-black text-sm bg-white font-bold py-2 px-10 rounded-full w-45">Sign-Up</button>
+                <button className="text-black h-10 text-sm bg-white font-bold py-2 px-10 rounded-full w-45">SignUp</button>
 
                     </Link>
             </div>
