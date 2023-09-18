@@ -11,18 +11,7 @@ export default function MainPage () {
     //     navigate('/')
     // }
     const {setUserInfo, userInfo} = useContext(UserContext)
-    useEffect(()=> {
-        console.log('hello from useeffect')
-        fetch('http://localhost:3000/user/profile', {
-            credentials: 'include', 
-
-        }).then(response => {response.json()
-            .then(userInfo => {
-                setUserInfo(userInfo);
-                
-            })
-        })
-    },[])
+    
 
      function logout (){
          fetch('http://localhost:3000/user/logout', {
@@ -37,11 +26,9 @@ export default function MainPage () {
     const username = userInfo?.username;
     const handleEdit = () => {
         console.log('edit clicked')
-    
-    const handleLogout = () => {
-        console.log('logout clicked')
-        navigate('/')
     }
+    
+   
 
     const handleUserPage = () => {
         console.log('user page clicked')
@@ -66,7 +53,7 @@ export default function MainPage () {
             {/* Content here */}
 
             </div>
-            <button className="absolute right-10 top-8" onClick={() => handleLogout()}>Logout</button>
+            <button className="absolute right-10 top-8" onClick={() => logout()}>Logout</button>
             <button className="absolute right-10 top-16" onClick={() => handleUserPage()}>My Itinerary</button>
         </div>
         </div>

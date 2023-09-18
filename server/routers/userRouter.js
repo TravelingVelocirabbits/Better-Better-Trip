@@ -17,6 +17,7 @@ router.get('/profile', userController.checkProfile, (req,res) => {
     res.status(200)
 })
 router.post('/save', userController.saveItinerary, (req, res) => {
+    console.log('hello from save router')
     res.status(200)
 })
 
@@ -25,7 +26,7 @@ router.post('/logout', userController.logOut, (req, res) => {
 } )
 
 router.get('/myitinerary', userController.serveItinerary, (req, res) => {
-    res.status(200).json(res.locals.userDoc)
+    res.status(200).json(res.locals.userItin)
 })
 
 

@@ -63,17 +63,23 @@ const ItineraryContainer = ({  }) => {
 
     //Save Feature 
 
-    const handleSaveItinerary = async () => {
+   async function handleSaveItinerary(ev) {
+        console.log('handle hit')
+        console.log('save iten', iteneraryData)
+        ev.preventDefault();
         try {
-          const response = await fetch('', {
+            console.log('inside try')
+          const response =  await fetch('http://localhost:3000/user/save', {
             method: 'POST',
+            body: JSON.stringify( {iteneraryData} ),
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ iteneraryData })
+            credentials: 'include'
           });
       
           if (!response.ok) {
+            console.log(response)
             throw new Error('Network response was not ok');
           }
       
@@ -93,7 +99,12 @@ const ItineraryContainer = ({  }) => {
                     onChange={(e) => handleInputChangeText(e.target.value)}
                     />
                 <button className="border border-black rounded-r-lg" onClick = {() => handleFetchAndDataDisplay() }> Click  away </button>
-                <button className='border border-black ml-8' onClick={handleSaveItinerary}>  Save </button>
+                <div >
+                <button className='border border-black ml-8' onClick={(e) =>{
+                    console.log('button clicked')
+                    return handleSaveItinerary(e)}} >  Save </button>
+
+                </div>
             </div>
             <div className="rounded-2xl flex flex-col items-center justify-center box-border w-full h-full p-4 border-4">
             {  isPending && iteneraryData.map((element, index) => {
