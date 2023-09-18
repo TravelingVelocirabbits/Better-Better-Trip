@@ -4,8 +4,7 @@ const apiController = require('../Controllers/apiController')
 
 const router = express.Router();
 
-router.post('/', apiController.getLatLong, apiController.getItinerary, (req, res) => {
-
+router.post('/', apiController.getLatLong, apiController.getItineraryInfo, apiController.getItineraryDetails, apiController.compileItinerary, (req, res) => {
   console.log('finished post request')
   return res.status(201).json(res.locals.itinerary);
 })
