@@ -1,5 +1,4 @@
 import React from 'react';
-import { GrFormClose } from 'react-icons/gr';
 
 const SignupSub = () => {
     return (
