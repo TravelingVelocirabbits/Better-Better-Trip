@@ -13,8 +13,6 @@ const UserSchema = new Schema({
 const UserModel = model('User', UserSchema);
 
 
-
-
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
