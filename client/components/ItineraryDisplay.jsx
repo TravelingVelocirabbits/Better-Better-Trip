@@ -1,43 +1,87 @@
 import MainPage from './MainPage'
 import React, { useState, useEffect }from 'react';
+import IteneraryCard from './IteneraryCard';
+import { useNavigate } from 'react-router-dom';
+
 
 const ItineraryContainer = ({  }) => {
 
+    const navigate = useNavigate();
+
+    const handleNavigate = () => {
+        console.log('user page clicked')
+        navigate('/userpage')
+    }
+
     const [query, setQuery] = useState("")
+    const [iteneraryData, setIteneraryData] = useState([])
+    const [isPending, setPending] = useState(false)
 
-    const [location, setLocation] = useState("")
+
+    // const [deletedItenerary, setDeletedI] = useState([])
     
-      //add this to the qeury 
-    const fetchLocations = () => {
 
-        fetch('http://localhost:3000/api', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({location: query})
-        })
-        .then (data => data.json())
-        .then(resData => {
-            console.log(resData);
-        }) .catch (err => console.log(err))
-     
+    const fetchLocations = async () => {
+        try {
+            
+            const response = await fetch('http://localhost:3000/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ location: query })
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const resData = await response.json();
+            console.log("Received Data:", resData);
+    
+            setIteneraryData(resData);
+    
+        } catch (err) {
+            console.log("Error:", err);
+        }
     };
-
-//     const fetchLocationsWithText = (value) => {
-//         fetch(`https://api.myptv.com/geocoding/v1/locations/by-text?searchText=${value}&apiKey=VVNfZmE1NmNiODg5MWM3NGM4NmI3NWVkOGYxNjUwZWQxMjM6MWFiOTk3MzctZGZkMC00NzlmLTljYmItZDYyMTZlMjEyZWYw`)
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log(data)
-//     });
-// }
+  
     const handleInputChangeText = (value) => {
         setQuery(value);
-        // fetchLocationsWithText(value)
     };
 
+    const handleFetchAndDataDisplay =  () => {
+         fetchLocations();
+         setPending(true);
+    }
 
 
+    const handleDeleteItenerary = (hotelName) => {
+        const filterIteneraryData = iteneraryData.filter(iteneraryEl => iteneraryEl.hotel.name !== hotelName)
+        setIteneraryData(filterIteneraryData);
+    }
+
+    //Save Feature 
+
+    const handleSaveItinerary = async () => {
+        try {
+          const response = await fetch('', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ iteneraryData })
+          });
+      
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+      
+        } catch (err) {
+          console.log(err);
+        }
+      };
+    
 
     return (
         <div className ="flex flex-col justify-center items-center">
@@ -48,14 +92,16 @@ const ItineraryContainer = ({  }) => {
                     value={query}
                     onChange={(e) => handleInputChangeText(e.target.value)}
                     />
-                <button className="border border-black rounded-r-lg" onClick = {fetchLocations}> Click  away </button>
+                <button className="border border-black rounded-r-lg" onClick = {() => handleFetchAndDataDisplay() }> Click  away </button>
+                <button className='border border-black ml-8' onClick={handleSaveItinerary}>  Save </button>
             </div>
-            <div className=" rounded-2xl flex flex-col items-center justify-center box-border w-96 p-4 border-4 h-64">
-                itinerary component 
+            <div className="rounded-2xl flex flex-col items-center justify-center box-border w-full h-full p-4 border-4">
+            {  isPending && iteneraryData.map((element, index) => {
+        return <IteneraryCard handleDeleteItenerary={handleDeleteItenerary} key={index}  index={index} iteneraryData={element}/>
+            })   }
             </div>
             </div>
-        
-        
+
     );
 };
 
