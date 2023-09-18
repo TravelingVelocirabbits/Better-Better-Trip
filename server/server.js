@@ -3,7 +3,8 @@ const path = require('path')
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
-// mongoose.connect('mongodb+srv://jdarmada:IDhZTT1neBqRK7Jj@cluster0.dogx99a.mongodb.net/?retryWrites=true&w=majority');
+const cookieParser = require('cookie-parser')
+mongoose.connect('mongodb+srv://jdarmada:IDhZTT1neBqRK7Jj@cluster0.dogx99a.mongodb.net/?retryWrites=true&w=majority');
 
 
 const userRouter = require('./routers/userRouter')
@@ -15,11 +16,12 @@ app.use(express.json());
 // Enable CORS for all routes
 app.use(cors({credentials:true, origin: 'http://localhost:8080'}));
 
+app.use(cookieParser())
 
 //router for user info requests
 app.use('/user', userRouter, (req, res) => {
 
-    console.log('hi')
+    console.log('hi from user router')
 
     return res.sendStatus(200)
 

@@ -64,21 +64,24 @@ userController.checkProfile =  (req, res, next) => {
 
 userController.saveItinerary = (req, res, next) => {
   const {token} = req.cookies;
-  const {itenararyData} = req.body
+  const {iteneraryData} = req.body
   jwt.verify(token, secret, async (err, info) => {
     if(err){
+      console.log('error in save')
       return next({log: 'Error in saveItinerary',
                    message: {err}})
     } else {
      const {username} = info;
-     const userDoc = await User.findOneAndUpdate({username: username}, {currentItinerary: itenararyData} );
+     const userDoc = await User.findOneAndUpdate({username: username}, {new:true}, {$push: {currentItinerary:{$each:iteneraryData}}} );
      console.log(userDoc);
+     console.log('saved new userdoc')
      return next();
     }
   })
 }
 userController.serveItinerary = (req, res, next) => {
   const {token} = req.cookies;
+  console.log(token)
   jwt.verify(token, secret, async (err, info) => {
     if(err){
       return next({log:'Error in serveItinerary',

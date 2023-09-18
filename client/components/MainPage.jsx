@@ -9,6 +9,7 @@ export default function MainPage () {
     const navigate = useNavigate();
 
     const {setUserInfo, userInfo} = useContext(UserContext)
+    
 
      function logout (){
          fetch('http://localhost:3000/user/logout', {
