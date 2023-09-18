@@ -3,13 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import ItineraryDisplay from './ItineraryDisplay'
 import { UserContext } from '../UserContext';
 
+
 export default function MainPage () {
+      
     const navigate = useNavigate();
 
-    // const handleLogout = () => {
-    //     console.log('logout clicked')
-    //     navigate('/')
-    // }
     const {setUserInfo, userInfo} = useContext(UserContext)
     
 
@@ -24,11 +22,6 @@ export default function MainPage () {
     }
 
     const username = userInfo?.username;
-    const handleEdit = () => {
-        console.log('edit clicked')
-    }
-    
-   
 
     const handleUserPage = () => {
         console.log('user page clicked')
@@ -36,36 +29,34 @@ export default function MainPage () {
     }
 
     const backgroundImageStyle = {
-        backgroundImage: "url('https://wallpaperaccess.com/full/2201199.jpg')",
+        backgroundImage: "url('https://rare-gallery.com/uploads/posts/110423-krabi-beach-hd-4k-wallpaper-thailand-best-beaches-in-the-world-tourism-travel-resort-vacation-sand-boat-sky-worlds-best-diving-sites.jpg')",
         backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        height: '350px',
       };
-    
 
-    return (
+      const headerStyle = {
+        fontFamily: "Pacifico, cursive",
+      };
+      
+      return (
         <>
-
-        
-    <div style={backgroundImageStyle}>
-        <div className="flex items-center justify-center bg-blue-100" style={backgroundImageStyle}>
-        <div className="flex flex-col">
-            <div className="absolute left-10 top-10 font-bold self-start text-2xl ml-8">
-            {/* Content here */}
-
+          <div style={backgroundImageStyle} className="relative">
+            <div className='flex justify-center align-center py-7'>
+            <h1 className='text-white text-6xl' style={{ fontFamily: 'Pacifico, cursive' }}> Better Trip </h1>
             </div>
-            <button className="absolute right-10 top-8" onClick={() => logout()}>Logout</button>
-            <button className="absolute right-10 top-16" onClick={() => handleUserPage()}>My Itinerary</button>
-        </div>
-        </div>
-
-    </div>
-
-    <div style={{ flexGrow: 1}}>
-        <ItineraryDisplay />
-        </div>
-
-
+            <div className="absolute top-0 left-0 w-full h-full z-0 mt-12">
+              <ItineraryDisplay />
+            </div>
+      
+            <div className="absolute top-0 right-0 z-10 flex flex-col space-y-5 p-4 mr-6 " >
+              <button className="text-white font-extrabold text-m" onClick={() => logout()}>Logout</button>
+              <button className="text-white font-extrabold text-m" onClick={() => handleUserPage()}>My Itinerary</button>
+            </div>
+          </div>
         </>
-    );
-};
+      );
+      
 
+    
+ }

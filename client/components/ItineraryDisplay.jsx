@@ -90,11 +90,11 @@ const ItineraryContainer = ({  }) => {
     
 
     return (
-        <div className ="flex flex-col justify-center items-center">
+        <div className ="flex flex-col justify-center items-center" >
             <div className="flex flex-row items-center justify-center h-80 ">
-                <input className='border border-black rounded-l-lg'
+                <input   className="w-full text h-7  border p-2 border-black rounded-sm text-black shadow-md hover:shadow-lg"
                     type="text"
-                    placeholder="Send Me Your Location: "
+                    placeholder="Plan Your Next Destination"
                     value={query}
                     onChange={(e) => handleInputChangeText(e.target.value)}
                     />
@@ -106,12 +106,16 @@ const ItineraryContainer = ({  }) => {
 
                 </div>
             </div>
-            <div className="rounded-2xl flex flex-col items-center justify-center box-border w-full h-full p-4 border-4">
+
+            <div  className='flex flex-col justify-around items-end'>
+            { isPending && <button className=' mr-5 border w-11 text-white bg-olive border-none rounded shadow-md' onClick={handleSaveItinerary}>  Save </button> }
             {  isPending && iteneraryData.map((element, index) => {
-        return <IteneraryCard handleDeleteItenerary={handleDeleteItenerary} key={index}  index={index} iteneraryData={element}/>
-            })   }
+                return <IteneraryCard handleDeleteItenerary={handleDeleteItenerary} key={index}  index={index} iteneraryData={element}/>
+                })   
+            }
             </div>
-            </div>
+
+        </div>
 
     );
 };

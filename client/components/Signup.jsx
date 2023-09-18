@@ -24,15 +24,19 @@ const Signup = () => {
         }
     }
    return (
-        <div className="logContainer" onSubmit={reg}>
-        <form className="form1" action="">
-            <h2 className="logTitle">Sign Up:</h2>
-            <input type="text" placeholder="username" value={username} onChange={event => {
+        <div className="flex justify-center items-center h-screen bg-grayGreen"onSubmit={reg}>
+        <form className="bg-white p-8 rounded-lg shadow-md w-1/3" action="">
+            <h2 className="text-2xl font-semibold mb-4">Sign Up:</h2>
+            <div className="mb-4">
+            <input className="w-full border-none border-rounded text-base" type="text" placeholder="username" value={username} onChange={event => {
                 setUsername(event.target.value)
             }}/>
-            <input type="password" placeholder="password" value ={password} onChange={event => setPassword(event.target.value)}/>
-            <button className="logBtn">enter</button>
-            <p>test</p>
+            </div>
+            <div className="mb-4">
+            <input className=" w-full border-none border-rounded text-base" type="password" placeholder="password" value ={password} onChange={event => setPassword(event.target.value)}/>
+            </div>
+            <button className="w-full p-2 h-8 text-white rounded-md text-m bg-olive" > Enter </button>
+
         </form>
     </div>
     )
