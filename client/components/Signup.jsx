@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Signup = () => {
+    const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     async function reg(ev) {
@@ -19,6 +20,7 @@ const Signup = () => {
             alert('Registration failed.')
         } else {
             alert('Registration Successful')
+            return navigate('/')
         }
     }
    return (

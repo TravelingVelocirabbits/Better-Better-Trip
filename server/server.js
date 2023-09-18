@@ -13,7 +13,7 @@ const apiRouter = require('./routers/apiRouter')
 // const User = require('./Models/userModel')
 app.use(express.json());
 // Enable CORS for all routes
-app.use(cors());
+app.use(cors({credentials:true, origin: 'http://localhost:8080'}));
 
 
 //router for user info requests

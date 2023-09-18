@@ -1,9 +1,44 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router';
 import Login from './Login';
+import { UserContext } from "../UserContext";
 
 
 
-const LoginSub = ({ username, setUsername, password, setPassword }) => {
+export default function LoginSub ({ useState, useContext}) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const {setUserInfo} = useContext(UserContext);
+  const navigate = useNavigate();
+
+  
+
+
+  //LOCALHOST3000/USERS/LOGIN
+  //POST REQUEST 
+
+
+  async function log(ev) {
+      ev.preventDefault();
+      const response = await fetch('http://localhost:3000/user/login', {
+          method: 'POST',
+          body: JSON.stringify({username, password}),
+          headers: {'Content-type':'application/json'},
+          credentials: 'include',
+      });
+      if(response.ok){ 
+          response.json().then(userInfo=>{
+            console.log(userInfo)
+              setUserInfo(userInfo);
+              return navigate('/mainpage')  
+          })
+      }else{
+          alert('wrong credentials')
+      }
+  }
+
+
+
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-grayGreen">
             <div className="absolute left-0 top-8 font-bold self-start text-2xl text-olive ml-8 ">Better Trip</div>
@@ -29,8 +64,8 @@ const LoginSub = ({ username, setUsername, password, setPassword }) => {
                 className=" border rounded-md p-2 bg-gray-100 py-2 px-20" />
             </div>
             
-            <div className = "mt-0 self-center">
-            <button className=" bg-gray-400 hover:bg-gray-300 text-white font-bold py-2 px-10 rounded-full">
+            <div className = "mt-0 self-center" onClick={log}>
+            <button className=" bg-gray-400 hover:bg-gray-300 text-white font-bold py-2 px-10 rounded-full" >
               Sign In
             </button>
             </div>
@@ -42,7 +77,7 @@ const LoginSub = ({ username, setUsername, password, setPassword }) => {
       );
 }
 
-export default LoginSub;
+
 //   return (
 //     <div className="
 //     flex flex-col max-h-screen bg-blue-900" >
