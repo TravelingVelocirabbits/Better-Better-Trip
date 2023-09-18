@@ -2,14 +2,14 @@ import { useState, useEffect} from "react";
 import React from "react";
 
 import { useNavigate } from 'react-router-dom';
-import { useState, useContext }from 'react'
+
+
+
+
 
 
 const Signup = () => {
-    const navigate = useNavigate();
-
-
-const Signup = () => {
+    const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     async function reg(ev) {
@@ -24,6 +24,7 @@ const Signup = () => {
             alert('Registration failed.')
         } else {
             alert('Registration Successful')
+            return navigate('/')
         }
     }
    return (
