@@ -1,5 +1,4 @@
-const { split } = require('postcss/lib/list');
-const {Location} = require('../Models/userModel');
+const {Location} = require('../Models/apiModel');
 
 const geoCoderKey = 'VVNfZmE1NmNiODg5MWM3NGM4NmI3NWVkOGYxNjUwZWQxMjM6MWFiOTk3MzctZGZkMC00NzlmLTljYmItZDYyMTZlMjEyZWYw';
 const tripAdvisorKey = '1E8652C75A5F4F3F8B12A9EE2EF42B04';
@@ -8,6 +7,7 @@ const apiController = {};
 
 apiController.getLatLong = async (req, res, next) => {
 
+  // **DO NOT CHANGE THIS TO FALSE PLEASE**
   res.locals.TESTING = true;
 
   if (res.locals.TESTING === true) {
@@ -133,106 +133,61 @@ apiController.getItineraryInfo = async (req, res, next) => {
   const coords = `${latitude},${longitude}`
 
   let locationData = await Location.findOne({coords})
-
-  if (!locationData) {
-    console.log('LOCATION DOESN\'T EXIST IN DB')
-    const itineraryData = {
-      hotels: [],
-      restaurants: [],
-      attractions: [],
-    }
     
-    // res.locals.photos = [];
+  const itineraryData = {
+    hotels: [],
+    restaurants: [],
+    attractions: [],
+  }
 
-    const categories = ['hotels', 'restaurants', 'attractions'];
+  const categories = ['hotels', 'restaurants', 'attractions'];
+
+  const fetchPromises = categories.map(async (category) => {
+    const response = await fetch(`https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=${latitude}%2C${longitude}&key=${tripAdvisorKey}&category=${category}&radius=10&radiusUnit=mi&language=en`);
+    const data = await response.json();
+
+    for (let i = 0; i < 3; i++) {
+      const { location_id, name, distance, bearing } = data.data[i];
+      const address = data.data[i].address_obj.address_string;
+
+      itineraryData[category].push({ locationID: location_id, name, distance, bearing, address });
+    };
+    return data;
+  });
+
   
-    const fetchPromises = categories.map(async (category) => {
-      const response = await fetch(`https://api.content.tripadvisor.com/api/v1/location/nearby_search?latLong=${latitude}%2C${longitude}&key=${tripAdvisorKey}&category=${category}&radius=10&radiusUnit=mi&language=en`);
-      const data = await response.json();
   
-      for (let i = 0; i < 3; i++) {
-        const { location_id, name, distance, bearing } = data.data[i];
-        const address = data.data[i].address_obj.address_string;
-
-        // const response = await fetch(`https://api.content.tripadvisor.com/api/v1/location/${location_id}/photos?key=${tripAdvisorKey}&language=en`);
-        // const fetchData = await response.json();
-
-        // let photo; 
-        // if (!fetchData.data[0]) {
-        //   photo = 'https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg';
-        // }
-        // else photo = fetchData.data[0].images.large.url;
-
-        // res.locals.photos.push({category, location_id, name, photo});
-  
-        itineraryData[category].push({ locationID: location_id, name, distance, bearing, address });
-      };
-
-      return data;
-    });
-
+  try {
+    await Promise.all(fetchPromises);
     
-    
-    try {
-      await Promise.all(fetchPromises);
-      
-      const { city, country } = res.locals.cityCountry
+    const { city, country } = res.locals.cityCountry
+    // if (!locationData) {
+    //   console.log('LOCATION DOESN\'T EXIST IN DB')
+    // }
+    // else {
+    //   console.log('LOCATION ALREADY EXISTS')
+    // }
       const newLocation = new Location({ city, country, coords });
       await newLocation.save();
       
       await Location.updateOne({ coords }, { $push: { hotels: { $each: itineraryData.hotels } } });
       await Location.updateOne({ coords }, { $push: { restaurants: { $each: itineraryData.restaurants } } });
       await Location.updateOne({ coords }, { $push: { attractions: { $each: itineraryData.attractions } } });
-      
-      locationData = await Location.findOne({ coords });
 
-    } catch (err) {
-      return next({
-        log: 'Error in APIController',
-        status: err.status || 500,
-        message: { err: err }
-      });
-    }
+    locationData = await Location.findOne({ coords });
 
-    res.locals.itineraryData = itineraryData
-
-  } else {
-    console.log('LOCATION ALREADY EXISTS')
+  } catch (err) {
+    return next({
+      log: 'Error in APIController',
+      status: err.status || 500,
+      message: { err: err }
+    });
   }
+
+  res.locals.itineraryData = itineraryData
 
   res.locals.locationData = locationData;
   
-  // const itinerary = [];
-  
-  // for (let i = 0; i < 3; i++) {
-  //   let day = {
-  //     hotel: {
-  //       name: locationData.hotels[i].name,
-  //       distance: locationData.hotels[i].distance,
-  //       bearing: locationData.hotels[i].bearing,
-  //       address: locationData.hotels[i].address,
-  //       // photo: locationData.hotels[i].photo || false,
-  //     },
-  //     restaurant: {
-  //       name: locationData.restaurants[i].name,
-  //       distance: locationData.restaurants[i].distance,
-  //       bearing: locationData.restaurants[i].bearing,
-  //       address: locationData.restaurants[i].address,
-  //     },
-  //     attraction: {
-  //       name: locationData.attractions[i].name,
-  //       distance: locationData.attractions[i].distance,
-  //       bearing: locationData.attractions[i].bearing,
-  //       address: locationData.attractions[i].address,
-  //     },
-  //   }
-
-  //   itinerary.push(day);
-  // }
-
-  // res.locals.itinerary = itinerary;
-
-  // console.log('LOCATION DATA: ', locationData)
   return next();
 }
 
@@ -241,9 +196,6 @@ apiController.getItineraryDetails = async (req, res, next) => {
   if (res.locals.TESTING === true) {
     return next();
   }
-
-  // console.log('Itin Data', res.locals.itineraryData)
-  // console.log('Loca Data', res.locals.locationData)
 
   const photoPromises = [];
   const ratingPromises = [];
@@ -266,6 +218,7 @@ apiController.getItineraryDetails = async (req, res, next) => {
         return { locationID: location.locationID, name: location.name, photo };
       })
 
+      // RATINGS
       const ratingPromise = fetch(`https://api.content.tripadvisor.com/api/v1/location/${location.locationID}/details?key=${tripAdvisorKey}&language=en&currency=USD`)
       .then(response => response.json())
       .then(fetchData => {
@@ -286,12 +239,7 @@ apiController.getItineraryDetails = async (req, res, next) => {
   res.locals.photos = photos
   res.locals.ratings = ratings
 
-
-  // console.log('res.locals.photos: ', res.locals.photos)
-  // console.log('res.locals.ratings: ', res.locals.ratings)
-
   return next();
-
 }
 
 apiController.compileItinerary = async (req, res, next) => {
@@ -331,6 +279,7 @@ apiController.compileItinerary = async (req, res, next) => {
     }
 
     itinerary.push(day);
+    
   }
 
   res.locals.itinerary = itinerary;
@@ -338,85 +287,35 @@ apiController.compileItinerary = async (req, res, next) => {
   return next();
 }
 
+/**
+ * USER ITINERARY REQUESTS
+*/
+
+apiController.getLocationID = async (req, res, next) => {
+  const body = req.body;
+
+  for (let i = 0; i < 3 && i < body.length; i++) {
+    const {name, address} = body[i].hotel;
+
+    const searchName = name.replace(' ', '%20');
+    const searchAddress = address.replace(' ', '%20').replace(',', '%2C');
+
+    const fetchPromises = body.map(async (element) => {
+      const response = await fetch(`https://api.content.tripadvisor.com/api/v1/location/search?key=${tripAdvisorKey}&searchQuery=${searchName}&address=${searchAddress}&language=en`);
+      const data = await response.json();
+
+      for (let i = 0; i < 3; i++) {
+        const { location_id, name, distance, bearing } = data.data[i];
+        const address = data.data[i].address_obj.address_string;
+
+        itineraryData[category].push({ locationID: location_id, name, distance, bearing, address });
+      };
+
+      return data;
+    });
+
+  }
+}
+
 
 module.exports = apiController;
-
-/*
-
-Loca Data {
-[1]   _id: new ObjectId("650799451c4e44d37ddd62b0"),
-[1]   city: 'London',
-[1]   country: 'England',
-[1]   coords: '51.50642013549805,-0.12721000611782074',
-[1]   hotels: [
-[1]     {
-[1]       name: "St. James's Hotel and Club Mayfair",
-[1]       distance: 0.5594212825866821,
-[1]       bearing: 'west',
-[1]       address: '7-8 Park Place, London SW1A 1LS England',
-[1]       _id: new ObjectId("650799451c4e44d37ddd62b2")
-[1]     },
-[1]     {
-[1]       name: 'The Stafford London',
-[1]       distance: 0.5469495183910489,
-[1]       bearing: 'west',
-[1]       address: "16/18 St. James's Place, London SW1A 1NJ England",
-[1]       _id: new ObjectId("650799451c4e44d37ddd62b3")
-[1]     },
-[1]     {
-[1]       name: 'John Howard Hotel',
-[1]       distance: 0.44304399389974214,
-[1]       bearing: 'southwest',
-[1]       address: "4 Queen's Gate, London SW7 5EH England",
-[1]       _id: new ObjectId("650799451c4e44d37ddd62b4")
-[1]     }
-[1]   ],
-[1]   restaurants: [
-[1]     {
-[1]       name: 'The Old Shades London Pub & Dining',
-[1]       distance: 0.007271366387638832,
-[1]       bearing: 'northeast',
-[1]       address: '37 Whitehall, London SW1A 2BX England',
-[1]       _id: new ObjectId("650799451c4e44d37ddd62b6")
-[1]     },
-[1]     {
-[1]       name: 'Walkers of Whitehall',
-[1]       distance: 0.022586730071780747,
-[1]       bearing: 'north',
-[1]       address: '15 Whitehall Whitehall, London SW1A 2DD England',
-[1]       _id: new ObjectId("650799451c4e44d37ddd62b7")
-[1]     },
-[1]     {
-[1]       name: 'The Silver Cross',
-[1]       distance: 0.018206055771385884,
-[1]       bearing: 'north',
-[1]       address: '33 Whitehall, London SW1A 2BX England',
-[1]       _id: new ObjectId("650799451c4e44d37ddd62b8")
-[1]     }
-[1]   ],
-[1]   attractions: [
-[1]     {
-[1]       name: 'The Lord Moon Of the Mall',
-[1]       distance: 0.003764160365157071,
-[1]       bearing: 'northeast',
-[1]       address: '16-18 Whitehall, London England',
-[1]       _id: new ObjectId("650799451c4e44d37ddd62ba")
-[1]     },
-[1]     {
-[1]       name: 'Monument To The Raf',
-[1]       distance: 0.008251329519604746,
-[1]       bearing: 'northeast',
-[1]       address: '79 Whitehall, London SW1A 2NL England',
-[1]       _id: new ObjectId("650799451c4e44d37ddd62bb")
-[1]     },
-[1]     {
-[1]       name: 'The Old Shades',
-[1]       distance: 0.011542878095578368,
-[1]       bearing: 'east',
-[1]       address: '37 Whitehall, London SW1A 2BX England',
-[1]       _id: new ObjectId("650799451c4e44d37ddd62bc")
-[1]     }
-[1]   ],
-[1]   __v: 0
-[1] }
-*/
