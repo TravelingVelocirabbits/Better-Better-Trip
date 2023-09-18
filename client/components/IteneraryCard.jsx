@@ -5,9 +5,11 @@ import { GrFormClose } from 'react-icons/gr';
 
 const IteneraryCard = ({iteneraryData, index, handleDeleteItenerary}) => {
 
+  
   return (
     <div className='first-line:mt-3 mb-3' > 
         <h1 className='text-black text-2xl font-extrabold bg-gray-100 p-5 rounded-lg shadow-md text-center'> Itinerary {index + 1}</h1>
+      
 
     <div className='flex justify-center space-x-8 my-8 h-1/5' >
 

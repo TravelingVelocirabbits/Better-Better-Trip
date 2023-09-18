@@ -14,6 +14,7 @@ apiController.getLatLong = async (req, res, next) => {
     res.locals.itinerary = [
       {
           "hotel": {
+              "locationName": "Sydney, Australia",
               "name": "Hilton Sydney",
               "distance": 0.14820227397979185,
               "bearing": "south",
@@ -40,6 +41,7 @@ apiController.getLatLong = async (req, res, next) => {
       },
       {
           "hotel": {
+              "locationName": "Sydney, Australia",
               "name": "Criterion Hotel Sydney",
               "distance": 0.24832061902400204,
               "bearing": "south",
@@ -66,6 +68,7 @@ apiController.getLatLong = async (req, res, next) => {
       },
       {
           "hotel": {
+              "locationName": "Sydney, Australia",
               "name": "Hotel Coronation",
               "distance": 0.23104783887290656,
               "bearing": "south",
@@ -249,10 +252,13 @@ apiController.compileItinerary = async (req, res, next) => {
   }
 
   const itinerary = [];
+
+  const {city, country} = res.locals.cityCountry;
   
   for (let i = 0; i < 3; i++) {
     let day = {
       hotel: {
+        locationName: `${city}, ${country}`,
         name: res.locals.locationData.hotels[i].name,
         distance: res.locals.locationData.hotels[i].distance,
         bearing: res.locals.locationData.hotels[i].bearing,

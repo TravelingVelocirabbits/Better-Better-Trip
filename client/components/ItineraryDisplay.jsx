@@ -17,7 +17,6 @@ const ItineraryContainer = ({  }) => {
     const [iteneraryData, setIteneraryData] = useState([])
     const [isPending, setPending] = useState(false)
 
-
     // const [deletedItenerary, setDeletedI] = useState([])
     
 
@@ -71,7 +70,7 @@ const ItineraryContainer = ({  }) => {
             console.log('inside try')
           const response =  await fetch('http://localhost:3000/user/save', {
             method: 'POST',
-            body: JSON.stringify( {iteneraryData} ),
+            body: JSON.stringify( {iteneraryData,} ),
             headers: {
               'Content-Type': 'application/json'
             },
@@ -92,23 +91,18 @@ const ItineraryContainer = ({  }) => {
     return (
         <div className ="flex flex-col justify-center items-center" >
             <div className="flex flex-row items-center justify-center h-80 ">
-                <input   className="w-full text h-7  border p-2 border-black rounded-sm text-black shadow-md hover:shadow-lg"
+                <input   className=" w-full text h-7  border p-3 border-black rounded-l-lg text-black shadow-md hover:shadow-lg"
                     type="text"
-                    placeholder="Plan Your Next Destination"
+                    placeholder="Plan Your Next Getaway"
                     value={query}
                     onChange={(e) => handleInputChangeText(e.target.value)}
                     />
-                <button className="border border-black rounded-r-lg" onClick = {() => handleFetchAndDataDisplay() }> Click  away </button>
-                <div >
-                <button className='border border-black ml-8' onClick={(e) =>{
-                    console.log('button clicked')
-                    return handleSaveItinerary(e)}} >  Save </button>
-
-                </div>
+                <button className= " bg-blue-700 w-1/3 h-7 text-lg border-none rounded-r-lg text-white shadow-md hover:shadow-lg"
+                onClick = {() => handleFetchAndDataDisplay() }> Search </button>
             </div>
 
             <div  className='flex flex-col justify-around items-end'>
-            { isPending && <button className=' mr-5 border w-11 text-white bg-olive border-none rounded shadow-md' onClick={handleSaveItinerary}>  Save </button> }
+            { isPending && <button className='transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300  mr-5 border w-11 text-white bg-blue-700 border-none rounded' onClick={handleSaveItinerary}>  Save </button> }
             {  isPending && iteneraryData.map((element, index) => {
                 return <IteneraryCard handleDeleteItenerary={handleDeleteItenerary} key={index}  index={index} iteneraryData={element}/>
                 })   

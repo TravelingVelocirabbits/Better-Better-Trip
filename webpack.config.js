@@ -55,6 +55,7 @@ module.exports = {
             '/': 'http://localhost:3000',
             '/signup': 'http://localhost:3000',  
             '/mainpage': 'http://localhost:3000',  
+            '/userpage' : 'http://localhost:3000'
         },
     }, 
     resolve: {
