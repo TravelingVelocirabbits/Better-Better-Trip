@@ -32,7 +32,7 @@ export default function MainPage () {
         backgroundImage: "url('https://rare-gallery.com/uploads/posts/110423-krabi-beach-hd-4k-wallpaper-thailand-best-beaches-in-the-world-tourism-travel-resort-vacation-sand-boat-sky-worlds-best-diving-sites.jpg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: '350px',
+        height: '60vh',
       };
 
       const headerStyle = {
@@ -50,8 +50,8 @@ export default function MainPage () {
             </div>
       
             <div className="absolute top-0 right-0 z-10 flex flex-col space-y-5 p-4 mr-6 " >
-              <button className="text-white font-extrabold text-m" onClick={() => logout()}>Logout</button>
-              <button className="text-white font-extrabold text-m" onClick={() => handleUserPage()}>My Itinerary</button>
+              <button className="text-white font-semibold text-m" onClick={() => logout()}>Logout</button>
+              <button className="text-white font-semibold text-m" onClick={() => handleUserPage()}>My Itinerary</button>
             </div>
           </div>
         </>

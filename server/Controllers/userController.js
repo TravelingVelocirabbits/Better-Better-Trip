@@ -72,8 +72,7 @@ userController.saveItinerary = (req, res, next) => {
                    message: {err}})
     } else {
      const {username} = info;
-     const userDoc = await User.findOneAndUpdate({username: username}, {new:true}, {$push: {currentItinerary:{$each:iteneraryData}}} );
-     console.log(userDoc);
+     const userDoc = await User.findOneAndUpdate({username: username}, {$push: {currentItinerary:{$each:iteneraryData}}} );
      console.log('saved new userdoc')
      return next();
     }
@@ -81,7 +80,6 @@ userController.saveItinerary = (req, res, next) => {
 }
 userController.serveItinerary = (req, res, next) => {
   const {token} = req.cookies;
-  console.log(token)
   jwt.verify(token, secret, async (err, info) => {
     if(err){
       return next({log:'Error in serveItinerary',
