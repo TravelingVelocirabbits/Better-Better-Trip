@@ -4,9 +4,8 @@ import React from 'react'
 
 const MyItineraryCards = ({renderItinerary}) => {
 
-    // console.log("Did this data come in", renderItinerary)
-    // console.log("Did this data come in hotel", renderItinerary[0].hotel.name)
 
+    
   return (
     <div className='first-line:mt-3 mb-0 ' > 
     <div className='  flex justify-center space-x-8 my-8 h-1/5' >
