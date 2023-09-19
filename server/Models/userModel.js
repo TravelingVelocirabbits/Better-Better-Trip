@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const {Schema, model} = mongoose;
-const MONGO_URI = 'mongodb+srv://jdarmada:IDhZTT1neBqRK7Jj@cluster0.dogx99a.mongodb.net/?retryWrites=true&w=majority'
+const MONGO_URI = ''
 
 
 const UserSchema = new Schema({
