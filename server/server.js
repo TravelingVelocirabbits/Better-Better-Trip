@@ -23,12 +23,7 @@ app.use(cookieParser())
 
 //router for user info requests
 app.use('/user', userRouter, (req, res) => {
-
-    console.log('hi from user router')
-
     return res.sendStatus(200)
-
-
 })
 
 app.use('/api', apiRouter, (req, res) => {
