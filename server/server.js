@@ -1,19 +1,21 @@
 const express = require('express');
 const path = require('path')
-const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
-
-const cookieParser = require('cookie-parser')
-mongoose.connect('mongodb+srv://jdarmada:IDhZTT1neBqRK7Jj@cluster0.dogx99a.mongodb.net/?retryWrites=true&w=majority');
-
-
+const User = require('./Models/userModel')
 const userRouter = require('./routers/userRouter')
-
 const apiRouter = require('./routers/apiRouter')
+const cookieParser = require('cookie-parser')
 
-// const User = require('./Models/userModel')
+const MONGO_URI = 'mongodb+srv://connorelikeyes:D36U8CGSL5maEh9h@cluster0.vxtr5rx.mongodb.net/?retryWrites=true&w=majority';
+
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to Mongo DB.'))
+    .catch(err => console.log(err));
+
+const app = express();
 app.use(express.json());
+
 // Enable CORS for all routes
 app.use(cors({credentials:true, origin: 'http://localhost:8080'}));
 
@@ -56,12 +58,7 @@ app.get('*', (req, res) => {
     return res.status(customError.status).json(customError.message);
  })
 
-const User = require('./Models/userModel')
 
-mongoose.connect('mongodb+srv://jdarmada:IDhZTT1neBqRK7Jj@cluster0.dogx99a.mongodb.net/?retryWrites=true&w=majority');
-
-
-app.use(express.json());
 
 app.use(cors());
 
