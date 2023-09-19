@@ -9,6 +9,8 @@ const UserPersonalItenerary = ({}) => {
   const [currentItinerary, setCurrentItinerary] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const {setUserInfo, userInfo} = useContext(UserContext)
+  // const {currentLocation, setCurrentLocation} = useState("")
+
   const navigate = useNavigate();
   
   function logout (){
@@ -19,7 +21,11 @@ const UserPersonalItenerary = ({}) => {
     setUserInfo(null);
     return navigate('/')
     
-}
+  }
+
+  const backHomeButton = () => {
+    return navigate('/mainpage')
+  }
   
   
   useEffect(() => {
@@ -30,7 +36,10 @@ const UserPersonalItenerary = ({}) => {
         });
         const data = await response.json();
         setCurrentItinerary(data);
-        setIsLoading(false)
+        setIsLoading(false);
+        // setCurrentLocation(data.currentItinerary[data.currentItinerary.length - 1].hotel.locationName)
+        // console.log("currentt location", currentLocation)
+        
 
       } catch (error) {
         console.error("There was a problem fetching the data", error);
@@ -50,25 +59,29 @@ const UserPersonalItenerary = ({}) => {
 
     return (
       <div>
-      <h1 className="text-white text-2xl font-extrabold bg-olive p-5 shadow-md text-center"> 
-        My Itineraries
-        </h1>
 
-        {isLoading ? ("") 
-        :
-          ( <h2 className="bg-olive pl-5 pb-5 text-white font-semibold mb-20">{currentItinerary.currentItinerary[0].hotel.locationName} </h2>
-          )
-        }
-
-        <button className="text-white font-semibold text-m absolute top-0 right-0 z-10 flex flex-col space-y-5 p-5 pr-4 " onClick={() => logout()}>Logout</button>
+        <div className="flex justify-between items-center bg-olive pt-6 p-6 shadow-md">
+          <h1 className="text-white text-2xl font-extrabold text-center">
+            My Itineraries
+          </h1>
+          <div></div> 
+          <div className="flex space-x-4">
+            <button className="text-white font-semibold text-m p-5 pr-4"
+              onClick={() => backHomeButton()}> Home </button>
+            <button className="text-white font-semibold text-m p-5 pr-4"
+              onClick={() => logout()}>Logout</button>
+          </div>
+      </div>
+    
+ 
         {isLoading ? (<p> loading... </p>)
         : (
           renderItinerary.map((element, index) => {
             return <MyItineraryCards key={index} index={index} renderItinerary={element} />
           })
         )
-      
       }
+
       </div>
     
     
